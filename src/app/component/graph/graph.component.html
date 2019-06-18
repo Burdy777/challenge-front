@@ -1,0 +1,23 @@
+<form [formGroup]="filterForm" (ngSubmit)="submit(filterForm.value)">
+    <div class="box" style="text-align: center">
+            <p>Filter by date</p>
+            <div class="box_calendar">
+                <p-calendar formControlName="dateFrom" [minDate]="minDateValue" [maxDate]="maxDateValue"  [showIcon]="true" dateFormat="mm/yy"></p-calendar>
+                <p-calendar formControlName="dateTo" [minDate]="minDateValue" [maxDate]="maxDateValue"  [showIcon]="true" dateFormat="mm/yy"></p-calendar>
+                <p-button label="rechercher" [disabled]="filterForm.invalid"></p-button>
+    
+            </div>
+            <sub class="box_warning"> <span>&#9888;</span> search only available between {{ minDateValue | date}} et {{ maxDateValue | date }}</sub>
+    
+        </div>
+    </form>
+    
+<div class="box_chart">
+<p-chart type="bar" [data]="topCategorieData"></p-chart>
+</div>
+
+<div class="box_average">
+    <h3>
+        The average search volume of the selected category is {{ average }} and for the same period one year ago it's {{ averageOneYearAgo }}
+    </h3>
+</div>
