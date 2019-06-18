@@ -1,0 +1,19 @@
+.box {
+    text-align: center;
+    margin-bottom: 2em;
+&_calendar > * {
+    margin-right: 1em;
+}
+&_warning {
+    font-size: 0.9em;
+    span {
+        color:red;
+        font-size: 1.2em;
+    }
+}
+}
+
+.box_chart {
+    margin: auto;
+    width: 80%;
+}

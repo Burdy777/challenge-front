@@ -10,11 +10,12 @@ export class StatService {
   }
 
   getAllCategories() {
-    return this.http.get('./../../assets/api/categories.json');
+    return this.http.get('./../../assets/api/categories.json').toPromise();
 }
+
 
 getCategorie(id:number) {
     return this.http.get(`/../../assets/api/volumes-${id}.json`);
-}
   
+}
 }

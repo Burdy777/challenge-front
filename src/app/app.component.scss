@@ -1,26 +1,18 @@
-h1  {
-    text-align: center;
-    margin-bottom: 1em;
-    span {
-        font-size: 1.3em;
-    }
-}
 
-.box {
-&_calendar > * {
-    margin-right: 1em;
-}
-&_warning {
-    font-weight: bold;
-    font-size: 0.9em;
-    span {
-        color:red;
-        font-size: 1.2em;
+nav {
+    background: black;
+    display: flex;
+    justify-content: space-around;
+    margin: 0 auto;
+    li {
+        display: inline;
+        padding-right: 3em;
+        a {
+            color: white;
+            &.router-link-active {
+                color:#42a5f6;
+            }
+        }
     }
-}
-}
 
-.box_chart {
-    margin: auto;
-    width: 88%;
 }

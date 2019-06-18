@@ -1,19 +1,14 @@
-<h1> <span style="color:gold">&#9733;</span>Top-Level Category</h1>
+<nav>
+    <ul>
+        <li>
+             <a [routerLink]="['/top-category']" routerLinkActive="router-link-active">Top Level Category</a>
+        </li>
+        <li>
+              <a [routerLink]="['/categories']" routerLinkActive="router-link-active"> See Categories</a>
+        </li>
+    </ul>
+</nav>
+<router-outlet></router-outlet>
 
-<form [formGroup]="filterForm" (ngSubmit)="submit(filterForm.value)">
-<div class="box">
-        <h2>Filter by date</h2>
-        <div class="box_calendar">
-            <p-calendar formControlName="dateFrom" [minDate]="minDateValue" [maxDate]="maxDateValue"  [showIcon]="true" dateFormat="mm/yy"></p-calendar>
-            <p-calendar formControlName="dateTo" [minDate]="minDateValue" [maxDate]="maxDateValue"  [showIcon]="true" dateFormat="mm/yy"></p-calendar>
-            <p-button label="rechercher" [disabled]="filterForm.invalid"></p-button>
 
-        </div>
-        <sub class="box_warning"> <span>&#9888;</span> search only available between {{ minDateValue | date}} et {{ maxDateValue | date }}</sub>
-
-    </div>
-</form>
-<div class="box_chart">
-    <p-chart type="bar" [data]="topCategorieData"></p-chart>
-</div>
 
