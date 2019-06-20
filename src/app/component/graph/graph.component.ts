@@ -2,6 +2,7 @@ import { Component, OnInit, Input, OnChanges, SimpleChanges } from '@angular/cor
 import { StatService } from 'src/app/service/stats.service';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import * as moment from 'moment';
+import { Storage } from 'src/app/service/storage.service';
 
 @Component({
   selector: 'app-graph',
@@ -17,31 +18,47 @@ export class GraphComponent implements OnInit, OnChanges {
   average:number;
   averageOneYearAgo: number;
 
-  constructor(public statService:StatService, private fb: FormBuilder) {}
+  constructor(public statService:StatService, private fb: FormBuilder, public storage:Storage) {}
 
   ngOnInit() {}
 
   ngOnChanges(changes:SimpleChanges) {
     this.buildForm();
-    this.getTopCategorie();
+    // fetch current value from the parent component
+    if(changes.topCategorieCurrent.currentValue) {
+      this.getTopCategorie();
+    }
   }
 
 
   private getTopCategorie() {
-    const lastTwelveElement = this.topCategorieCurrent.slice(Math.max(this.topCategorieCurrent.length - 12, 1))
-    const indexReference = this.topCategorieCurrent.indexOf(this.topCategorieCurrent[this.topCategorieCurrent.length - 12])
-    const listOfTwelveElementOneYearAgo = this.topCategorieCurrent.slice(indexReference-12, indexReference)
+    let listMonthtInit:any[];
+    let listOfTwelveElementOneYearAgo: any[];
+    let listMonthFinal: any[]
+    // edit user
+    if(this.storage.has('userSelection')) {
+      listMonthtInit = JSON.parse(this.storage.get('userSelection'))
+      listOfTwelveElementOneYearAgo = JSON.parse(this.storage.get('userSelectionOneYearAgo'))
+      this.setDate(moment(listOfTwelveElementOneYearAgo[0].timespan).add(1,"year").toDate(), moment(listOfTwelveElementOneYearAgo[listOfTwelveElementOneYearAgo.length -1].timespan).add(1,"year").toDate())
+
+      listMonthFinal = listMonthtInit.map((item, index) => {
+        return {volume: item.volume, label: listOfTwelveElementOneYearAgo.length > 0 ? 
+          moment(listOfTwelveElementOneYearAgo[index].timespan).format('MMMM'): moment(item.timespan).format('MMMM Y')}
+      }) // new user
+    } else {
+      listMonthtInit = this.topCategorieCurrent.slice(Math.max(this.topCategorieCurrent.length - 12, 1))
+      const indexReference = this.topCategorieCurrent.indexOf(this.topCategorieCurrent[this.topCategorieCurrent.length - 12])
+      listOfTwelveElementOneYearAgo = this.topCategorieCurrent.slice(indexReference-12, indexReference)
+      this.setDate(moment(listMonthtInit[0].timespan).toDate(), moment(listMonthtInit[listMonthtInit.length -1].timespan).toDate())
+      listMonthFinal = listMonthtInit.map((item) => {
+        return {volume: item.volume, label: listOfTwelveElementOneYearAgo.length > 0 ?
+           moment(item.timespan).format('MMMM'): moment(item.timespan).format('MMMM Y')}
+      })
+    }
+   
+
     this.setMinMaxDate(this.topCategorieCurrent);
-
-    const listOfLastTwelveElement = lastTwelveElement.map((item) => {
-      return {volume: item.volume, label: listOfTwelveElementOneYearAgo.length > 0 ? moment(item.timespan).format('MMMM'): moment(item.timespan).format('MMMM Y')}
-    })
-
-    
-    this.filterForm.get('dateFrom').setValue(moment(lastTwelveElement[0].timespan).toDate());
-    this.filterForm.get('dateTo').setValue(moment(lastTwelveElement[lastTwelveElement.length -1].timespan).toDate())
-    
-    this.setGraph(listOfLastTwelveElement.map(item => item.volume),listOfLastTwelveElement.map(item => item.label),
+    this.setGraph(listMonthFinal.map(item => item.volume),listMonthFinal.map(item => item.label),
     listOfTwelveElementOneYearAgo.map(item => item.volume));
 
   }
@@ -53,13 +70,20 @@ export class GraphComponent implements OnInit, OnChanges {
     })
   }
 
+
   private setMinMaxDate(categorie: any[]) {
-    this.minDateValue = moment(categorie[0].timespan).toDate()
+    this.minDateValue = moment(categorie[13].timespan).toDate()
     this.maxDateValue = moment(categorie[categorie.length - 1].timespan).toDate();
-    
   }
 
+  private setDate(dateFrom, dateTo ) {
+    this.filterForm.get('dateFrom').setValue(moment(dateFrom).toDate());
+    this.filterForm.get('dateTo').setValue(moment(dateTo).toDate());
+  }
+
+
   private setGraph(volume, month, volumeOneYearAgo = []) {
+    // config module for graphic
     this.topCategorieData = {
       labels: month,
       datasets: [
@@ -86,20 +110,24 @@ export class GraphComponent implements OnInit, OnChanges {
 
   public submit(dateFiltred) {
     let listOfCategoriesOneYearAgo: any[]
+    // get date filtred
     const listCategoriesFiltred = this.statService.getVolumeByDate(this.topCategorieCurrent, dateFiltred)
-     const indexReference = this.topCategorieCurrent.findIndex(item => moment(listCategoriesFiltred[0].timespan).subtract(1,"year").calendar() === moment(item.timespan).calendar())
-     if(indexReference !== -1) {
-       // refaire la methode pour mettre a jour les liste
-        listOfCategoriesOneYearAgo =  this.topCategorieCurrent.slice(indexReference, this.topCategorieCurrent.indexOf(listCategoriesFiltred[0]))
 
+     const indexReferenceFrom = this.topCategorieCurrent.findIndex(item => moment(listCategoriesFiltred[0].timespan).subtract(1,"year").calendar() === moment(item.timespan).calendar())
+     const indexReferenceTo = this.topCategorieCurrent.findIndex(item => moment(listCategoriesFiltred[listCategoriesFiltred.length-1].timespan).subtract(1,"year").calendar() === moment(item.timespan).calendar())
+     
+     if(indexReferenceFrom !== -1) {
+        listOfCategoriesOneYearAgo =  this.topCategorieCurrent.slice(indexReferenceFrom, indexReferenceTo+1)
      }
        const listFinal = listCategoriesFiltred.map(item => {
          return {volume: item.volume, label: listOfCategoriesOneYearAgo.length > 0 ? moment(item.timespan).format('MMMM') : moment(item.timespan).format('MMMM Y')}
        })
-
+       
+       // save selection user in storage
+       this.storage.set('userSelection', JSON.stringify(listFinal));
+       this.storage.set('userSelectionOneYearAgo', JSON.stringify(listOfCategoriesOneYearAgo))
+       
        this.setGraph(listFinal.map(item => item.volume),listFinal.map(item => item.label), listOfCategoriesOneYearAgo.map(item => item.volume))
-       console.log(listOfCategoriesOneYearAgo, listCategoriesFiltred)
-
   }
 
   

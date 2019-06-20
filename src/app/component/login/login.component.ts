@@ -16,6 +16,7 @@ export class LoginComponent implements OnInit  {
                private router: Router) { }
 
   ngOnInit() {
+    this.authService.logout();
     this.buildForm();
   }
 
@@ -30,6 +31,7 @@ export class LoginComponent implements OnInit  {
       const val = this.loginForm.value;
       if (val.name && val.password) {
         this.authService.login(val.name, val.password).subscribe(() => {
+          // after the redirect a guard chek if the token is correctly insert into the storage './auth-guard'
           this.router.navigateByUrl('/top-category');
         })
       }      
