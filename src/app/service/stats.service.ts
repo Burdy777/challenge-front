@@ -1,10 +1,11 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import * as moment from 'moment';
+import { Storage } from './storage.service';
 
 @Injectable()
 export class StatService {
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient, public storage:Storage) { }
 
   getTopCategorie() {
       return this.http.get('assets/api/volumes-0.json');

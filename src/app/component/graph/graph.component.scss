@@ -20,3 +20,15 @@
 .box_average {
     text-align: center;
 }
+
+@media screen and (min-width: 200px) and (max-width: 425px) {
+    .box {
+    &_calendar {
+        display: flex;
+        flex-direction: column;
+        & > * {
+            padding-top:0.5em;
+        }
+    }
+    }
+  }

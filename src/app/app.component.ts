@@ -28,7 +28,6 @@ ngOnInit(){
 
 
 public logout() {
-  this.auth.logout();
   this.router.navigate(['/']);
 }
 
