@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute, NavigationStart } from '@angular/router';
+import { AuthService } from './service/auth.service';
 
 
 @Component({
@@ -8,15 +9,29 @@ import { Router } from '@angular/router';
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent implements OnInit {
-constructor(private router:Router) {
+isLoginPage: boolean
+constructor(private router:Router, private auth:AuthService, public route:ActivatedRoute) { 
 
 }
+
 ngOnInit(){
-
+  this.router.events.subscribe(e => {
+    if(e instanceof NavigationStart) {
+      if(e.url === '/' || e.url === '/login') {
+        this.isLoginPage = true;
+      } else {
+        this.isLoginPage = false;
+      }
+    }
+  })
 }
 
-public navigate() {
-  this.router.navigate(['/categories'])
+
+public logout() {
+  this.auth.logout();
+  this.router.navigate(['/']);
 }
+
+
   
 }

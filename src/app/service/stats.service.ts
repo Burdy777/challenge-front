@@ -7,16 +7,16 @@ export class StatService {
   constructor(private http: HttpClient) { }
 
   getTopCategorie() {
-      return this.http.get('./../../assets/api/volumes-0.json');
+      return this.http.get('assets/api/volumes-0.json');
   }
 
   getAllCategories() {
-    return this.http.get('./../../assets/api/categories.json').toPromise();
+    return this.http.get('assets/api/categories.json').toPromise();
 }
 
 
 getCategorie(id:number) {
-    return this.http.get(`/../../assets/api/volumes-${id}.json`);
+    return this.http.get(`assets/api/volumes-${id}.json`);
 }
 
 getAverageCategories(listOfCategorie: any[]): number {

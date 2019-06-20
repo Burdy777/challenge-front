@@ -1,4 +1,4 @@
-<nav>
+<nav *ngIf="!isLoginPage">
     <ul>
         <li>
              <a [routerLink]="['/top-category']" routerLinkActive="router-link-active">Top Level Category</a>
@@ -6,6 +6,9 @@
         <li>
               <a [routerLink]="['/categories']" routerLinkActive="router-link-active"> See Categories</a>
         </li>
+        <li>
+              <a (click)="logout()">Logout</a>
+          </li>
     </ul>
 </nav>
 <router-outlet></router-outlet>
