@@ -1,0 +1,26 @@
+
+nav {
+    background: black;
+    display: flex;
+    justify-content: space-around;
+    margin: 0 auto;
+    li {
+        display: inline;
+        padding-right: 3em;
+        a {
+            color: white;
+            &.router-link-active {
+                color:#42a5f6;
+            }
+        }
+    }
+}
+
+@media screen and (min-width: 200px) and (max-width: 425px) {
+   
+nav {
+    li {
+        display: block;
+    }
+}
+  }

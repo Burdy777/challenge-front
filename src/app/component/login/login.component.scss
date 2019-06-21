@@ -1,0 +1,23 @@
+form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 15em;
+    h1 {
+        letter-spacing: 0.4em;
+        &+div {
+            margin-top: 1em;
+        }
+    }
+    .ui-inputgroup input{
+        width: 20em;
+        margin-top: 0.5em;
+        margin-bottom: 1em;
+    }
+}
+@media screen and (min-width: 200px) and (max-width: 425px) {
+    form {
+        margin-top: 10em;
+
+    }
+}

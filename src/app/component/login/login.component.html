@@ -1,0 +1,17 @@
+<form [formGroup]="loginForm">
+    <h1>Digital Value</h1>
+    <div>
+        <label>Name:</label>
+            <div class="ui-inputgroup">
+                <input type="text" pInputText placeholder="Username" name="name" formControlName="name">         
+            </div>
+            <label>Password</label>
+            <div class="ui-inputgroup">
+                <input type="password" [feedback]="false" pPassword name="password" formControlName="password" />
+            </div>           
+    </div>
+    <div class="form-buttons"> 
+        <p-button label="Login" (click)="login()" [disabled]="loginForm.invalid"></p-button>
+    </div>
+    (any name and password Work)
+</form>

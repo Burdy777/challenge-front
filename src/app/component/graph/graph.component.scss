@@ -1,0 +1,34 @@
+.box {
+    text-align: center;
+    margin-bottom: 2em;
+&_calendar > * {
+    margin-right: 1em;
+}
+&_warning {
+    font-size: 0.9em;
+    span {
+        color:red;
+        font-size: 1.2em;
+    }
+}
+}
+
+.box_chart {
+    margin: auto;
+    width: 80%;
+}
+.box_average {
+    text-align: center;
+}
+
+@media screen and (min-width: 200px) and (max-width: 425px) {
+    .box {
+    &_calendar {
+        display: flex;
+        flex-direction: column;
+        & > * {
+            padding-top:0.5em;
+        }
+    }
+    }
+  }
