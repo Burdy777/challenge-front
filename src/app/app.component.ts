@@ -15,6 +15,7 @@ constructor(private router:Router, private auth:AuthService, public route:Activa
 }
 
 ngOnInit(){
+  // subscribe to current url.
   this.router.events.subscribe(e => {
     if(e instanceof NavigationStart) {
       if(e.url === '/' || e.url === '/login') {

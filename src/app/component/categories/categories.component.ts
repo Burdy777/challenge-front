@@ -14,6 +14,7 @@ categorySelected
 
   ngOnInit() {
     this.statService.getAllCategories().then(categories => {
+      // config to create the tree of category
       const treeChildren = categories['children'].map(c => {
           return {
             "id":c.id,

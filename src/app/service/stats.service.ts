@@ -7,6 +7,7 @@ import { Storage } from './storage.service';
 export class StatService {
   constructor(private http: HttpClient, public storage:Storage) { }
 
+//  The interceptor '/authent-interceptor' insert the token for every request
   getTopCategorie() {
       return this.http.get('assets/api/volumes-0.json');
   }

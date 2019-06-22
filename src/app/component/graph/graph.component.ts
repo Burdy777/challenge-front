@@ -24,6 +24,7 @@ export class GraphComponent implements OnInit, OnChanges {
 
   ngOnChanges(changes:SimpleChanges) {
     this.buildForm();
+    // fetch current value from the parent component
     if(changes.topCategorieCurrent.currentValue) {
       this.getTopCategorie();
     }
@@ -34,7 +35,7 @@ export class GraphComponent implements OnInit, OnChanges {
     let listMonthtInit:any[];
     let listOfTwelveElementOneYearAgo: any[];
     let listMonthFinal: any[]
-    // if user has filtred before
+    // edit user
     if(this.storage.has('userSelection')) {
       listMonthtInit = JSON.parse(this.storage.get('userSelection'))
       listOfTwelveElementOneYearAgo = JSON.parse(this.storage.get('userSelectionOneYearAgo'))
@@ -43,7 +44,10 @@ export class GraphComponent implements OnInit, OnChanges {
       listMonthFinal = listMonthtInit.map((item, index) => {
         return {volume: item.volume, label: listOfTwelveElementOneYearAgo.length > 0 ? 
           moment(listOfTwelveElementOneYearAgo[index].timespan).format('MMMM'): moment(item.timespan).format('MMMM Y')}
+      }) 
+      // new user
       })
+
     } else {
       listMonthtInit = this.topCategorieCurrent.slice(Math.max(this.topCategorieCurrent.length - 12, 1))
       const indexReference = this.topCategorieCurrent.indexOf(this.topCategorieCurrent[this.topCategorieCurrent.length - 12])
@@ -80,7 +84,14 @@ export class GraphComponent implements OnInit, OnChanges {
     this.filterForm.get('dateTo').setValue(moment(dateTo).toDate());
   }
 
+  private setDate(dateFrom, dateTo ) {
+    this.filterForm.get('dateFrom').setValue(moment(dateFrom).toDate());
+    this.filterForm.get('dateTo').setValue(moment(dateTo).toDate());
+  }
+
+
   private setGraph(volume, month, volumeOneYearAgo = []) {
+    // config module for graphic
     this.topCategorieData = {
       labels: month,
       datasets: [
@@ -120,6 +131,7 @@ export class GraphComponent implements OnInit, OnChanges {
          return {volume: item.volume, label: listOfCategoriesOneYearAgo.length > 0 ? moment(item.timespan).format('MMMM') : moment(item.timespan).format('MMMM Y')}
        })
        
+       // save selection user in storage
        this.storage.set('userSelection', JSON.stringify(listFinal));
        this.storage.set('userSelectionOneYearAgo', JSON.stringify(listOfCategoriesOneYearAgo))
        

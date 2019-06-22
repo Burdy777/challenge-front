@@ -37,6 +37,7 @@ import { PrimeNgModule } from './prime-ng/prime-ng.module';
     FormsModule,
     ReactiveFormsModule,
     AppRoutingModule,
+    // Ngmodule for primeNg is separate
     PrimeNgModule,
     BrowserAnimationsModule
   ],
