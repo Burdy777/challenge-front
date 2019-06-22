@@ -44,7 +44,10 @@ export class GraphComponent implements OnInit, OnChanges {
       listMonthFinal = listMonthtInit.map((item, index) => {
         return {volume: item.volume, label: listOfTwelveElementOneYearAgo.length > 0 ? 
           moment(listOfTwelveElementOneYearAgo[index].timespan).format('MMMM'): moment(item.timespan).format('MMMM Y')}
-      }) // new user
+      }) 
+      // new user
+      })
+
     } else {
       listMonthtInit = this.topCategorieCurrent.slice(Math.max(this.topCategorieCurrent.length - 12, 1))
       const indexReference = this.topCategorieCurrent.indexOf(this.topCategorieCurrent[this.topCategorieCurrent.length - 12])
@@ -74,6 +77,11 @@ export class GraphComponent implements OnInit, OnChanges {
   private setMinMaxDate(categorie: any[]) {
     this.minDateValue = moment(categorie[13].timespan).toDate()
     this.maxDateValue = moment(categorie[categorie.length - 1].timespan).toDate();
+  }
+
+  private setDate(dateFrom, dateTo ) {
+    this.filterForm.get('dateFrom').setValue(moment(dateFrom).toDate());
+    this.filterForm.get('dateTo').setValue(moment(dateTo).toDate());
   }
 
   private setDate(dateFrom, dateTo ) {
