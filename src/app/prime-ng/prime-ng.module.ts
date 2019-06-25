@@ -5,13 +5,17 @@ import {InputTextModule} from 'primeng/inputtext';
 import {PasswordModule} from 'primeng/password';
 import {ChartModule} from 'primeng/chart';
 import {CalendarModule} from 'primeng/calendar';
+import {MessagesModule} from 'primeng/messages';
+import {MessageModule} from 'primeng/message'
 
 const MODULE = [
   TreeModule,
   InputTextModule,
   PasswordModule,
   ChartModule,
-  CalendarModule
+  CalendarModule,
+  MessageModule,
+  MessagesModule
 ]
 @NgModule({
   imports: [

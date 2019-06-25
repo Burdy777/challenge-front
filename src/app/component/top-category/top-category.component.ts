@@ -1,5 +1,5 @@
-import { Component, OnInit, createPlatformFactory } from '@angular/core';
-import { StatService } from 'src/app/service/stats.service';
+import { Component, OnInit, createPlatformFactory, Inject } from '@angular/core';
+import { StatService } from 'src/app/domain/service/stats.service';
 @Component({
   selector: 'app-top-category',
   templateUrl: './top-category.component.html',
@@ -7,7 +7,7 @@ import { StatService } from 'src/app/service/stats.service';
 })
 export class TopCategoryComponent implements OnInit {
   topCategorieCurrent;
-  constructor(public statService:StatService) {}
+  constructor(@Inject('StatService') public statService:StatService) {}
 
   ngOnInit() {
     this.statService.getTopCategorie().subscribe((topCategorie:Array<any>) => {

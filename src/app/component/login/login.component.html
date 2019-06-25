@@ -13,5 +13,8 @@
     <div class="form-buttons"> 
         <p-button label="Login" (click)="login()" [disabled]="loginForm.invalid"></p-button>
     </div>
-    (any name and password Work)
+    (any name and password Work)<br>
+    <p-messages [(value)]="msg"></p-messages>
+    <p-messages [(value)]="msgApp"></p-messages>
+
 </form>

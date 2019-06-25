@@ -1,8 +1,9 @@
-import { Component, OnInit, Input, OnChanges, SimpleChanges } from '@angular/core';
-import { StatService } from 'src/app/service/stats.service';
+import { Component, OnInit, Input, OnChanges, SimpleChanges, Inject } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import * as moment from 'moment';
-import { Storage } from 'src/app/service/storage.service';
+import { StatService } from 'src/app/domain/service/stats.service';
+import { Storage } from 'src/app/infrastructure/storage/storage.service';
+import { StorageRepository } from 'src/app/infrastructure/contracts/storageRepository';
 
 @Component({
   selector: 'app-graph',
@@ -18,13 +19,13 @@ export class GraphComponent implements OnInit, OnChanges {
   average:number;
   averageOneYearAgo: number;
 
-  constructor(public statService:StatService, private fb: FormBuilder, public storage:Storage) {}
+  constructor(@Inject('StatService') public statService:StatService, private fb: FormBuilder, @Inject('StorageRepository')public storageRepository:StorageRepository) {}
 
   ngOnInit() {}
 
   ngOnChanges(changes:SimpleChanges) {
     this.buildForm();
-    // fetch current value from the parent component
+    // fetch current value from the parent component 
     if(changes.topCategorieCurrent.currentValue) {
       this.getTopCategorie();
     }
@@ -36,18 +37,15 @@ export class GraphComponent implements OnInit, OnChanges {
     let listOfTwelveElementOneYearAgo: any[];
     let listMonthFinal: any[]
     // edit user
-    if(this.storage.has('userSelection')) {
-      listMonthtInit = JSON.parse(this.storage.get('userSelection'))
-      listOfTwelveElementOneYearAgo = JSON.parse(this.storage.get('userSelectionOneYearAgo'))
+    if(this.storageRepository.has('userSelection')) {
+      listMonthtInit = JSON.parse(this.storageRepository.get('userSelection'))
+      listOfTwelveElementOneYearAgo = JSON.parse(this.storageRepository.get('userSelectionOneYearAgo'))
       this.setDate(moment(listOfTwelveElementOneYearAgo[0].timespan).add(1,"year").toDate(), moment(listOfTwelveElementOneYearAgo[listOfTwelveElementOneYearAgo.length -1].timespan).add(1,"year").toDate())
 
       listMonthFinal = listMonthtInit.map((item, index) => {
         return {volume: item.volume, label: listOfTwelveElementOneYearAgo.length > 0 ? 
           moment(listOfTwelveElementOneYearAgo[index].timespan).format('MMMM'): moment(item.timespan).format('MMMM Y')}
-      }) 
-      // new user
-      })
-
+      }) // new user
     } else {
       listMonthtInit = this.topCategorieCurrent.slice(Math.max(this.topCategorieCurrent.length - 12, 1))
       const indexReference = this.topCategorieCurrent.indexOf(this.topCategorieCurrent[this.topCategorieCurrent.length - 12])
@@ -77,11 +75,6 @@ export class GraphComponent implements OnInit, OnChanges {
   private setMinMaxDate(categorie: any[]) {
     this.minDateValue = moment(categorie[13].timespan).toDate()
     this.maxDateValue = moment(categorie[categorie.length - 1].timespan).toDate();
-  }
-
-  private setDate(dateFrom, dateTo ) {
-    this.filterForm.get('dateFrom').setValue(moment(dateFrom).toDate());
-    this.filterForm.get('dateTo').setValue(moment(dateTo).toDate());
   }
 
   private setDate(dateFrom, dateTo ) {
@@ -132,8 +125,8 @@ export class GraphComponent implements OnInit, OnChanges {
        })
        
        // save selection user in storage
-       this.storage.set('userSelection', JSON.stringify(listFinal));
-       this.storage.set('userSelectionOneYearAgo', JSON.stringify(listOfCategoriesOneYearAgo))
+       this.storageRepository.set('userSelection', JSON.stringify(listFinal));
+       this.storageRepository.set('userSelectionOneYearAgo', JSON.stringify(listOfCategoriesOneYearAgo))
        
        this.setGraph(listFinal.map(item => item.volume),listFinal.map(item => item.label), listOfCategoriesOneYearAgo.map(item => item.volume))
   }

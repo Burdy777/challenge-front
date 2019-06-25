@@ -4,7 +4,7 @@
             <div class="box_calendar">
                 <p-calendar formControlName="dateFrom" [minDate]="minDateValue" [maxDate]="maxDateValue"  [showIcon]="true" dateFormat="mm/yy"></p-calendar>
                 <p-calendar formControlName="dateTo" [minDate]="minDateValue" [maxDate]="maxDateValue"  [showIcon]="true" dateFormat="mm/yy"></p-calendar>
-                <p-button label="rechercher" [disabled]="filterForm.invalid"></p-button>
+                <p-button label="search" [disabled]="filterForm.invalid"></p-button>
             </div>
             <sub class="box_warning"> <span>&#9888;</span> search only available between {{ minDateValue | date}} and {{ maxDateValue | date }}</sub>
         </div>

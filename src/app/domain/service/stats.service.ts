@@ -1,24 +1,22 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import * as moment from 'moment';
-import { Storage } from './storage.service';
+import { StatRepository } from 'src/app/infrastructure/contracts/statRepository';
 
 @Injectable()
 export class StatService {
-  constructor(private http: HttpClient, public storage:Storage) { }
+  constructor(public statRepository:StatRepository) { }
 
-//  The interceptor '/authent-interceptor' insert the token for every request
-  getTopCategorie() {
-      return this.http.get('assets/api/volumes-0.json');
-  }
-
-  getAllCategories() {
-    return this.http.get('assets/api/categories.json').toPromise();
+getTopCategorie() {
+      return this.statRepository.getTopCategorie();
 }
 
+getAllCategories() {
+    return this.statRepository.getAllCategories();
+}
 
 getCategorie(id:number) {
-    return this.http.get(`assets/api/volumes-${id}.json`);
+    return this.statRepository.getCategorie(id);
 }
 
 getAverageCategories(listOfCategorie: any[]): number {

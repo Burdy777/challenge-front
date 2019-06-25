@@ -3,7 +3,7 @@ import { Routes, RouterModule } from '@angular/router';
 import { TopCategoryComponent } from './component/top-category/top-category.component';
 import { CategoriesComponent } from './component/categories/categories.component';
 import { LoginComponent } from './component/login/login.component';
-import { AuthGuard } from './guards/auth.guard';
+import { AuthGuard } from './shared/guards/auth.guard';
 
 const routes: Routes = [
   {path:'', redirectTo:'login', pathMatch:'full'},

@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute, NavigationStart } from '@angular/router';
-import { AuthService } from './service/auth.service';
+import { AuthService } from './domain/service/auth.service';
 
 
 @Component({
@@ -10,7 +10,7 @@ import { AuthService } from './service/auth.service';
 })
 export class AppComponent implements OnInit {
 isLoginPage: boolean
-constructor(private router:Router, private auth:AuthService, public route:ActivatedRoute) { 
+constructor(private router:Router, public route:ActivatedRoute) { 
 
 }
 

@@ -1,7 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Inject } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import { AuthService } from 'src/app/service/auth.service';
+import { AuthService } from 'src/app/domain/service/auth.service';
 
 @Component({
   selector: 'login',
@@ -10,10 +10,19 @@ import { AuthService } from 'src/app/service/auth.service';
 })
 export class LoginComponent implements OnInit  {
   loginForm:FormGroup;
+  msg = [{
+   severity:'info',
+   summary:"The purpose of the application is to provide you with a maintainable architecture for a front-end translation development." 
+  }];
+  msgApp = [{
+    severity:'info',
+    summary: "The app allows the user to filter between multiple dates to get the number of searches for a category by keyword and month."
+  }]
 
   constructor(private fb:FormBuilder, 
-               private authService: AuthService, 
-               private router: Router) { }
+               private router: Router,
+               @Inject('AuthService') private authService: AuthService
+               ) { }
 
   ngOnInit() {
     this.authService.logout();
@@ -30,8 +39,7 @@ export class LoginComponent implements OnInit  {
   login() {
       const val = this.loginForm.value;
       if (val.name && val.password) {
-        this.authService.login(val.name, val.password).subscribe(() => {
-          // after the redirect a guard chek if the token is correctly insert into the storage './auth-guard'
+        this.authService.login(val.name, val.password).subscribe((res) => {
           this.router.navigateByUrl('/top-category');
         })
       }      
